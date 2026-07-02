@@ -1,0 +1,27 @@
+{
+  "name": "vulnerable-springboot-app-feature-2.1",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "start": "mvn spring-boot:run",
+    "test": "npm run test:security",
+    "test:security-only": "cucumber-js --require-module ts-node/register --require tests/support/**/*.ts --require tests/step-definitions/**/*.ts features/test.feature --format json:reports/cucumber-report.json --format html:reports/cucumber-report.html",
+    "test:security": "start-server-and-test start http://localhost:8080 test:security-only",
+    "playwright:install": "npx playwright install chromium",
+    "test:ui:browser": "set PLAYWRIGHT_HEADLESS=0 && npx cucumber-js --require-module ts-node/register --require tests/support/**/*.ts --require tests/step-definitions/**/*.ts features/ui-security-validation.feature --format json:reports/cucumber-ui-report.json --format html:reports/cucumber-ui-report.html",
+    "test:ui": "start-server-and-test start http://localhost:8080 test:ui:browser",
+    "report:html": "node reports/generate-html-report.js",
+    "report:ui:html": "node reports/generate-ui-html-report.js",
+    "open:report": "node scripts/open-report.js",
+    "posttest": "npm run report:html && npm run report:ui:html && npm run open:report"
+  },
+  "devDependencies": {
+    "@cucumber/cucumber": "^13.0.0",
+    "@types/node": "^20.11.0",
+    "cucumber-html-reporter": "^5.0.2",
+    "playwright": "^1.47.0",
+    "start-server-and-test": "^3.0.11",
+    "ts-node": "^10.9.1",
+    "typescript": "^5.5.0"
+  }
+}

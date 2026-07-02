@@ -1,0 +1,590 @@
+[
+  {
+    "description": "",
+    "elements": [
+      {
+        "description": "",
+        "id": "security-validation-for-remediations;vuln-004a-register-and-login-returns-no-password-(positive)",
+        "keyword": "Scenario",
+        "line": 4,
+        "name": "VULN-004a Register and login returns no password (positive)",
+        "steps": [
+          {
+            "keyword": "Before",
+            "hidden": true,
+            "result": {
+              "status": "passed",
+              "duration": 442241599
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Given ",
+            "line": 5,
+            "name": "I register user \"testuser\" with password \"pass123\"",
+            "match": {
+              "location": "tests\\step-definitions\\security-validation.steps.ts:6"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 244538899
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "When ",
+            "line": 6,
+            "name": "I login as \"testuser\" with password \"pass123\"",
+            "match": {
+              "location": "tests\\step-definitions\\security-validation.steps.ts:18"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 246868900
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Then ",
+            "line": 7,
+            "name": "the login response is successful and does not contain a password field",
+            "match": {
+              "location": "tests\\step-definitions\\security-validation.steps.ts:62"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 1064300
+            }
+          },
+          {
+            "keyword": "After",
+            "hidden": true,
+            "result": {
+              "status": "passed",
+              "duration": 99366699
+            }
+          }
+        ],
+        "tags": [],
+        "type": "scenario"
+      },
+      {
+        "description": "",
+        "id": "security-validation-for-remediations;vuln-004b-login-fails-with-incorrect-password-(negative)",
+        "keyword": "Scenario",
+        "line": 9,
+        "name": "VULN-004b Login fails with incorrect password (negative)",
+        "steps": [
+          {
+            "keyword": "Before",
+            "hidden": true,
+            "result": {
+              "status": "passed",
+              "duration": 263003999
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Given ",
+            "line": 10,
+            "name": "user \"testuser\" exists with password \"pass123\"",
+            "match": {
+              "location": "tests\\step-definitions\\security-validation.steps.ts:12"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 191540200
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "When ",
+            "line": 11,
+            "name": "I login as \"testuser\" with password \"wrongpass\"",
+            "match": {
+              "location": "tests\\step-definitions\\security-validation.steps.ts:18"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 143459799
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Then ",
+            "line": 12,
+            "name": "the login response status is 401",
+            "match": {
+              "location": "tests\\step-definitions\\security-validation.steps.ts:68"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 206400
+            }
+          },
+          {
+            "keyword": "After",
+            "hidden": true,
+            "result": {
+              "status": "passed",
+              "duration": 361235499
+            }
+          }
+        ],
+        "tags": [],
+        "type": "scenario"
+      },
+      {
+        "description": "",
+        "id": "security-validation-for-remediations;vuln-005a-non-admin-cannot-enumerate-users",
+        "keyword": "Scenario",
+        "line": 15,
+        "name": "VULN-005a Non-admin cannot enumerate users",
+        "steps": [
+          {
+            "keyword": "Before",
+            "hidden": true,
+            "result": {
+              "status": "passed",
+              "duration": 223205899
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Given ",
+            "line": 16,
+            "name": "I login as \"alice\" with password \"alice123\"",
+            "match": {
+              "location": "tests\\step-definitions\\security-validation.steps.ts:18"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 125729699
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "When ",
+            "line": 17,
+            "name": "I request GET \"/api/users\" using basic auth for \"alice\"",
+            "match": {
+              "location": "tests\\step-definitions\\security-validation.steps.ts:31"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 426514100
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Then ",
+            "line": 18,
+            "name": "the response status should be 403",
+            "match": {
+              "location": "tests\\step-definitions\\security-validation.steps.ts:72"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 327500
+            }
+          },
+          {
+            "keyword": "After",
+            "hidden": true,
+            "result": {
+              "status": "passed",
+              "duration": 541227300
+            }
+          }
+        ],
+        "tags": [],
+        "type": "scenario"
+      },
+      {
+        "description": "",
+        "id": "security-validation-for-remediations;vuln-005b-admin-can-enumerate-users",
+        "keyword": "Scenario",
+        "line": 20,
+        "name": "VULN-005b Admin can enumerate users",
+        "steps": [
+          {
+            "keyword": "Before",
+            "hidden": true,
+            "result": {
+              "status": "passed",
+              "duration": 228037299
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Given ",
+            "line": 21,
+            "name": "I login as \"admin\" with password \"admin123\"",
+            "match": {
+              "location": "tests\\step-definitions\\security-validation.steps.ts:18"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 123548299
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "When ",
+            "line": 22,
+            "name": "I request GET \"/api/users\" using basic auth for \"admin\"",
+            "match": {
+              "location": "tests\\step-definitions\\security-validation.steps.ts:31"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 161377799
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Then ",
+            "line": 23,
+            "name": "the response status should be 200 and body is an array",
+            "match": {
+              "location": "tests\\step-definitions\\security-validation.steps.ts:76"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 219599
+            }
+          },
+          {
+            "keyword": "After",
+            "hidden": true,
+            "result": {
+              "status": "passed",
+              "duration": 146616200
+            }
+          }
+        ],
+        "tags": [],
+        "type": "scenario"
+      },
+      {
+        "description": "",
+        "id": "security-validation-for-remediations;vuln-006a-owner-can-read-own-profile,-non-owner-denied",
+        "keyword": "Scenario",
+        "line": 26,
+        "name": "VULN-006a Owner can read own profile, non-owner denied",
+        "steps": [
+          {
+            "keyword": "Before",
+            "hidden": true,
+            "result": {
+              "status": "passed",
+              "duration": 281563100
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Given ",
+            "line": 27,
+            "name": "I login as \"alice\" with password \"alice123\" and capture id as \"aliceId\"",
+            "match": {
+              "location": "tests\\step-definitions\\security-validation.steps.ts:24"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 139770599
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "When ",
+            "line": 28,
+            "name": "I request GET \"/api/profile/{aliceId}\" using basic auth for \"alice\"",
+            "match": {
+              "location": "tests\\step-definitions\\security-validation.steps.ts:31"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 157513500
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Then ",
+            "line": 29,
+            "name": "the response status should be 200 and username equals \"alice\"",
+            "match": {
+              "location": "tests\\step-definitions\\security-validation.steps.ts:104"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 251199
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "When ",
+            "line": 30,
+            "name": "I login as \"bob\" with password \"bob123\" and capture as \"bobId\"",
+            "match": {
+              "location": "tests\\step-definitions\\security-validation.steps.ts:97"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 210540699
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 31,
+            "name": "I request GET \"/api/profile/{aliceId}\" using basic auth for \"bob\"",
+            "match": {
+              "location": "tests\\step-definitions\\security-validation.steps.ts:31"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 141167100
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Then ",
+            "line": 32,
+            "name": "the response status should be 403",
+            "match": {
+              "location": "tests\\step-definitions\\security-validation.steps.ts:72"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 193599
+            }
+          },
+          {
+            "keyword": "After",
+            "hidden": true,
+            "result": {
+              "status": "passed",
+              "duration": 578931200
+            }
+          }
+        ],
+        "tags": [],
+        "type": "scenario"
+      },
+      {
+        "description": "",
+        "id": "security-validation-for-remediations;vuln-006b-owner-can-transfer-funds;-non-owner-cannot",
+        "keyword": "Scenario",
+        "line": 34,
+        "name": "VULN-006b Owner can transfer funds; non-owner cannot",
+        "steps": [
+          {
+            "keyword": "Before",
+            "hidden": true,
+            "result": {
+              "status": "passed",
+              "duration": 224003899
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Given ",
+            "line": 35,
+            "name": "I login as \"alice\" with password \"alice123\" and capture id as \"aliceId\"",
+            "match": {
+              "location": "tests\\step-definitions\\security-validation.steps.ts:24"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 121674300
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 36,
+            "name": "I login as \"bob\" with password \"bob123\" and capture id as \"bobId\"",
+            "match": {
+              "location": "tests\\step-definitions\\security-validation.steps.ts:24"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 127635500
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "When ",
+            "line": 37,
+            "name": "I perform POST \"/api/transfer\" with body {\"fromId\": {aliceId}, \"toId\": {bobId}, \"amount\": 10.0} using basic auth for \"alice\"",
+            "match": {
+              "location": "tests\\step-definitions\\security-validation.steps.ts:119"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 164563099
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Then ",
+            "line": 38,
+            "name": "the response status should be 200 and body.status equals \"ok\"",
+            "match": {
+              "location": "tests\\step-definitions\\security-validation.steps.ts:111"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 275700
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "When ",
+            "line": 39,
+            "name": "I perform POST \"/api/transfer\" with body {\"fromId\": {aliceId}, \"toId\": {bobId}, \"amount\": 5.0} using basic auth for \"bob\"",
+            "match": {
+              "location": "tests\\step-definitions\\security-validation.steps.ts:119"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 137389100
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Then ",
+            "line": 40,
+            "name": "the response status should be 403",
+            "match": {
+              "location": "tests\\step-definitions\\security-validation.steps.ts:72"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 135299
+            }
+          },
+          {
+            "keyword": "After",
+            "hidden": true,
+            "result": {
+              "status": "passed",
+              "duration": 546597100
+            }
+          }
+        ],
+        "tags": [],
+        "type": "scenario"
+      }
+    ],
+    "id": "security-validation-for-remediations",
+    "line": 1,
+    "keyword": "Feature",
+    "name": "Security validation for remediations",
+    "tags": [],
+    "uri": "features\\test.feature"
+  },
+  {
+    "description": "",
+    "elements": [
+      {
+        "description": "",
+        "id": "ui-security-validation;login-page-can-be-rendered-and-allows-alice-to-sign-in",
+        "keyword": "Scenario",
+        "line": 3,
+        "name": "Login page can be rendered and allows alice to sign in",
+        "steps": [
+          {
+            "keyword": "Before",
+            "hidden": true,
+            "result": {
+              "status": "passed",
+              "duration": 270973500
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Given ",
+            "line": 4,
+            "name": "I open the login page",
+            "match": {
+              "location": "tests\\step-definitions\\ui-security-validation.steps.ts:6"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 888427099
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Then ",
+            "line": 5,
+            "name": "I should see a page containing \"OWASP Lab\"",
+            "match": {
+              "location": "tests\\step-definitions\\ui-security-validation.steps.ts:24"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 535001000
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "When ",
+            "line": 6,
+            "name": "I sign in as \"alice\" with password \"alice123\"",
+            "match": {
+              "location": "tests\\step-definitions\\ui-security-validation.steps.ts:12"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 2268410399
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Then ",
+            "line": 7,
+            "name": "I should see a page containing \"Dashboard\"",
+            "match": {
+              "location": "tests\\step-definitions\\ui-security-validation.steps.ts:24"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 556647200
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 8,
+            "name": "I should see a page containing \"Signed in as alice\"",
+            "match": {
+              "location": "tests\\step-definitions\\ui-security-validation.steps.ts:24"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 514728599
+            }
+          },
+          {
+            "keyword": "After",
+            "hidden": true,
+            "result": {
+              "status": "passed",
+              "duration": 528398299
+            }
+          }
+        ],
+        "tags": [],
+        "type": "scenario"
+      }
+    ],
+    "id": "ui-security-validation",
+    "line": 1,
+    "keyword": "Feature",
+    "name": "UI security validation",
+    "tags": [],
+    "uri": "features\\ui-security-validation.feature"
+  }
+]

@@ -1,0 +1,119 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>UI Cucumber Test Report</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 24px; color: #1a1a1a; background: #f8f9fb; }
+    h1, h2, h3 { color: #0f4c81; }
+    .summary, .scenario { background: white; border: 1px solid #d8dee7; border-radius: 8px; padding: 18px; margin-bottom: 18px; box-shadow: 0 2px 6px rgba(15,23,42,0.06); }
+    .summary ul, .scenario ul { list-style: none; padding-left: 0; }
+    .summary li, .scenario li { margin: 6px 0; }
+    .status-pill { display: inline-flex; align-items: center; gap: 0.5rem; padding: 4px 10px; border-radius: 999px; color: white; font-weight: 600; text-transform: uppercase; font-size: 0.78rem; }
+    .passed { background: #16a34a; }
+    .failed { background: #dc2626; }
+    .unknown { background: #f59e0b; }
+    .step-list { margin: 0; padding-left: 0; }
+    .step-list li { margin: 4px 0; padding: 8px 12px; border-radius: 6px; background: #f3f4f6; }
+    .step-list li .step-status { font-weight: 700; }
+    .footer { color: #475569; font-size: 0.95rem; }
+  </style>
+</head>
+<body>
+  <h1>UI Cucumber Test Report</h1>
+  <p class="footer">Generated: 2/7/2026, 9:13:33 pm</p>
+  <div class="summary">
+    <h2>Summary</h2>
+    <ul>
+      <li><strong>Features:</strong> 2</li>
+      <li><strong>Scenarios:</strong> 7</li>
+      <li><strong>Passed:</strong> 7</li>
+      <li><strong>Failed:</strong> 0</li>
+      <li><strong>Pending/Unknown:</strong> 0</li>
+      <li><strong>Steps:</strong> 29</li>
+      <li><strong>Passed steps:</strong> 29</li>
+      <li><strong>Failed steps:</strong> 0</li>
+      <li><strong>Skipped steps:</strong> 0</li>
+      <li><strong>Undefined steps:</strong> 0</li>
+    </ul>
+  </div>
+  
+    <div class="scenario">
+      <h2>VULN-004a Register and login returns no password (positive)</h2>
+      <p><strong>Feature:</strong> Security validation for remediations</p>
+      <p><strong>Line:</strong> 4</p>
+      <p><span class="status-pill passed">passed</span></p>
+      <h3>Steps</h3>
+      <ul class="step-list">
+        <li><strong>Given</strong> I register user "testuser" with password "pass123" <span class="step-status">passed</span></li><li><strong>When</strong> I login as "testuser" with password "pass123" <span class="step-status">passed</span></li><li><strong>Then</strong> the login response is successful and does not contain a password field <span class="step-status">passed</span></li>
+      </ul>
+    </div>
+  
+    <div class="scenario">
+      <h2>VULN-004b Login fails with incorrect password (negative)</h2>
+      <p><strong>Feature:</strong> Security validation for remediations</p>
+      <p><strong>Line:</strong> 9</p>
+      <p><span class="status-pill passed">passed</span></p>
+      <h3>Steps</h3>
+      <ul class="step-list">
+        <li><strong>Given</strong> user "testuser" exists with password "pass123" <span class="step-status">passed</span></li><li><strong>When</strong> I login as "testuser" with password "wrongpass" <span class="step-status">passed</span></li><li><strong>Then</strong> the login response status is 401 <span class="step-status">passed</span></li>
+      </ul>
+    </div>
+  
+    <div class="scenario">
+      <h2>VULN-005a Non-admin cannot enumerate users</h2>
+      <p><strong>Feature:</strong> Security validation for remediations</p>
+      <p><strong>Line:</strong> 15</p>
+      <p><span class="status-pill passed">passed</span></p>
+      <h3>Steps</h3>
+      <ul class="step-list">
+        <li><strong>Given</strong> I login as "alice" with password "alice123" <span class="step-status">passed</span></li><li><strong>When</strong> I request GET "/api/users" using basic auth for "alice" <span class="step-status">passed</span></li><li><strong>Then</strong> the response status should be 403 <span class="step-status">passed</span></li>
+      </ul>
+    </div>
+  
+    <div class="scenario">
+      <h2>VULN-005b Admin can enumerate users</h2>
+      <p><strong>Feature:</strong> Security validation for remediations</p>
+      <p><strong>Line:</strong> 20</p>
+      <p><span class="status-pill passed">passed</span></p>
+      <h3>Steps</h3>
+      <ul class="step-list">
+        <li><strong>Given</strong> I login as "admin" with password "admin123" <span class="step-status">passed</span></li><li><strong>When</strong> I request GET "/api/users" using basic auth for "admin" <span class="step-status">passed</span></li><li><strong>Then</strong> the response status should be 200 and body is an array <span class="step-status">passed</span></li>
+      </ul>
+    </div>
+  
+    <div class="scenario">
+      <h2>VULN-006a Owner can read own profile, non-owner denied</h2>
+      <p><strong>Feature:</strong> Security validation for remediations</p>
+      <p><strong>Line:</strong> 26</p>
+      <p><span class="status-pill passed">passed</span></p>
+      <h3>Steps</h3>
+      <ul class="step-list">
+        <li><strong>Given</strong> I login as "alice" with password "alice123" and capture id as "aliceId" <span class="step-status">passed</span></li><li><strong>When</strong> I request GET "/api/profile/{aliceId}" using basic auth for "alice" <span class="step-status">passed</span></li><li><strong>Then</strong> the response status should be 200 and username equals "alice" <span class="step-status">passed</span></li><li><strong>When</strong> I login as "bob" with password "bob123" and capture as "bobId" <span class="step-status">passed</span></li><li><strong>And</strong> I request GET "/api/profile/{aliceId}" using basic auth for "bob" <span class="step-status">passed</span></li><li><strong>Then</strong> the response status should be 403 <span class="step-status">passed</span></li>
+      </ul>
+    </div>
+  
+    <div class="scenario">
+      <h2>VULN-006b Owner can transfer funds; non-owner cannot</h2>
+      <p><strong>Feature:</strong> Security validation for remediations</p>
+      <p><strong>Line:</strong> 34</p>
+      <p><span class="status-pill passed">passed</span></p>
+      <h3>Steps</h3>
+      <ul class="step-list">
+        <li><strong>Given</strong> I login as "alice" with password "alice123" and capture id as "aliceId" <span class="step-status">passed</span></li><li><strong>And</strong> I login as "bob" with password "bob123" and capture id as "bobId" <span class="step-status">passed</span></li><li><strong>When</strong> I perform POST "/api/transfer" with body {"fromId": {aliceId}, "toId": {bobId}, "amount": 10.0} using basic auth for "alice" <span class="step-status">passed</span></li><li><strong>Then</strong> the response status should be 200 and body.status equals "ok" <span class="step-status">passed</span></li><li><strong>When</strong> I perform POST "/api/transfer" with body {"fromId": {aliceId}, "toId": {bobId}, "amount": 5.0} using basic auth for "bob" <span class="step-status">passed</span></li><li><strong>Then</strong> the response status should be 403 <span class="step-status">passed</span></li>
+      </ul>
+    </div>
+  
+    <div class="scenario">
+      <h2>Login page can be rendered and allows alice to sign in</h2>
+      <p><strong>Feature:</strong> UI security validation</p>
+      <p><strong>Line:</strong> 3</p>
+      <p><span class="status-pill passed">passed</span></p>
+      <h3>Steps</h3>
+      <ul class="step-list">
+        <li><strong>Given</strong> I open the login page <span class="step-status">passed</span></li><li><strong>Then</strong> I should see a page containing "OWASP Lab" <span class="step-status">passed</span></li><li><strong>When</strong> I sign in as "alice" with password "alice123" <span class="step-status">passed</span></li><li><strong>Then</strong> I should see a page containing "Dashboard" <span class="step-status">passed</span></li><li><strong>And</strong> I should see a page containing "Signed in as alice" <span class="step-status">passed</span></li>
+      </ul>
+    </div>
+  
+</body>
+</html>

@@ -1,0 +1,597 @@
+[
+  {
+    "description": "",
+    "elements": [
+      {
+        "description": "",
+        "id": "security-validation-for-remediations;vuln-004a-register-and-login-returns-no-password-(positive)",
+        "keyword": "Scenario",
+        "line": 4,
+        "name": "VULN-004a Register and login returns no password (positive)",
+        "steps": [
+          {
+            "keyword": "Before",
+            "hidden": true,
+            "result": {
+              "status": "passed",
+              "duration": 479950799
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Given ",
+            "line": 5,
+            "name": "I register user \"testuser\" with password \"pass123\"",
+            "match": {
+              "location": "tests\\step-definitions\\security-validation.steps.ts:6"
+            },
+            "result": {
+              "status": "failed",
+              "duration": 24768399,
+              "error_message": "apiRequestContext.post: connect ECONNREFUSED 127.0.0.1:8080\nCall log:\n\u001b[2m  - → POST http://127.0.0.1:8080/api/register\u001b[22m\n\u001b[2m    - user-agent: Playwright/1.61.1 (x64; windows 10.0) node/24.16\u001b[22m\n\u001b[2m    - accept: */*\u001b[22m\n\u001b[2m    - accept-encoding: gzip,deflate,br\u001b[22m\n\u001b[2m    - content-type: application/json\u001b[22m\n\u001b[2m    - content-length: 76\u001b[22m\n\n    at CustomWorld.<anonymous> (C:\\Users\\user\\Downloads\\vulnerable-springboot-app-feature-2.1\\vulnerable-springboot-app-feature-2.1\\tests\\step-definitions\\security-validation.steps.ts:7:38)"
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "When ",
+            "line": 6,
+            "name": "I login as \"testuser\" with password \"pass123\"",
+            "match": {
+              "location": "tests\\step-definitions\\security-validation.steps.ts:18"
+            },
+            "result": {
+              "status": "skipped",
+              "duration": 0
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Then ",
+            "line": 7,
+            "name": "the login response is successful and does not contain a password field",
+            "match": {
+              "location": "tests\\step-definitions\\security-validation.steps.ts:62"
+            },
+            "result": {
+              "status": "skipped",
+              "duration": 0
+            }
+          },
+          {
+            "keyword": "After",
+            "hidden": true,
+            "result": {
+              "status": "passed",
+              "duration": 529433900
+            }
+          }
+        ],
+        "tags": [],
+        "type": "scenario"
+      },
+      {
+        "description": "",
+        "id": "security-validation-for-remediations;vuln-004b-login-fails-with-incorrect-password-(negative)",
+        "keyword": "Scenario",
+        "line": 9,
+        "name": "VULN-004b Login fails with incorrect password (negative)",
+        "steps": [
+          {
+            "keyword": "Before",
+            "hidden": true,
+            "result": {
+              "status": "passed",
+              "duration": 245312399
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Given ",
+            "line": 10,
+            "name": "user \"testuser\" exists with password \"pass123\"",
+            "match": {
+              "location": "tests\\step-definitions\\security-validation.steps.ts:12"
+            },
+            "result": {
+              "status": "failed",
+              "duration": 3714300,
+              "error_message": "apiRequestContext.post: connect ECONNREFUSED 127.0.0.1:8080\nCall log:\n\u001b[2m  - → POST http://127.0.0.1:8080/api/register\u001b[22m\n\u001b[2m    - user-agent: Playwright/1.61.1 (x64; windows 10.0) node/24.16\u001b[22m\n\u001b[2m    - accept: */*\u001b[22m\n\u001b[2m    - accept-encoding: gzip,deflate,br\u001b[22m\n\u001b[2m    - content-type: application/json\u001b[22m\n\u001b[2m    - content-length: 76\u001b[22m\n\n    at CustomWorld.<anonymous> (C:\\Users\\user\\Downloads\\vulnerable-springboot-app-feature-2.1\\vulnerable-springboot-app-feature-2.1\\tests\\step-definitions\\security-validation.steps.ts:13:38)"
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "When ",
+            "line": 11,
+            "name": "I login as \"testuser\" with password \"wrongpass\"",
+            "match": {
+              "location": "tests\\step-definitions\\security-validation.steps.ts:18"
+            },
+            "result": {
+              "status": "skipped",
+              "duration": 0
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Then ",
+            "line": 12,
+            "name": "the login response status is 401",
+            "match": {
+              "location": "tests\\step-definitions\\security-validation.steps.ts:68"
+            },
+            "result": {
+              "status": "skipped",
+              "duration": 0
+            }
+          },
+          {
+            "keyword": "After",
+            "hidden": true,
+            "result": {
+              "status": "passed",
+              "duration": 86893600
+            }
+          }
+        ],
+        "tags": [],
+        "type": "scenario"
+      },
+      {
+        "description": "",
+        "id": "security-validation-for-remediations;vuln-005a-non-admin-cannot-enumerate-users",
+        "keyword": "Scenario",
+        "line": 15,
+        "name": "VULN-005a Non-admin cannot enumerate users",
+        "steps": [
+          {
+            "keyword": "Before",
+            "hidden": true,
+            "result": {
+              "status": "passed",
+              "duration": 293543499
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Given ",
+            "line": 16,
+            "name": "I login as \"alice\" with password \"alice123\"",
+            "match": {
+              "location": "tests\\step-definitions\\security-validation.steps.ts:18"
+            },
+            "result": {
+              "status": "failed",
+              "duration": 3625100,
+              "error_message": "apiRequestContext.post: connect ECONNREFUSED 127.0.0.1:8080\nCall log:\n\u001b[2m  - → POST http://127.0.0.1:8080/api/login\u001b[22m\n\u001b[2m    - user-agent: Playwright/1.61.1 (x64; windows 10.0) node/24.16\u001b[22m\n\u001b[2m    - accept: */*\u001b[22m\n\u001b[2m    - accept-encoding: gzip,deflate,br\u001b[22m\n\u001b[2m    - content-type: application/json\u001b[22m\n\u001b[2m    - content-length: 42\u001b[22m\n\n    at CustomWorld.<anonymous> (C:\\Users\\user\\Downloads\\vulnerable-springboot-app-feature-2.1\\vulnerable-springboot-app-feature-2.1\\tests\\step-definitions\\security-validation.steps.ts:19:38)"
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "When ",
+            "line": 17,
+            "name": "I request GET \"/api/users\" using basic auth for \"alice\"",
+            "match": {
+              "location": "tests\\step-definitions\\security-validation.steps.ts:31"
+            },
+            "result": {
+              "status": "skipped",
+              "duration": 0
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Then ",
+            "line": 18,
+            "name": "the response status should be 403",
+            "match": {
+              "location": "tests\\step-definitions\\security-validation.steps.ts:72"
+            },
+            "result": {
+              "status": "skipped",
+              "duration": 0
+            }
+          },
+          {
+            "keyword": "After",
+            "hidden": true,
+            "result": {
+              "status": "passed",
+              "duration": 173086000
+            }
+          }
+        ],
+        "tags": [],
+        "type": "scenario"
+      },
+      {
+        "description": "",
+        "id": "security-validation-for-remediations;vuln-005b-admin-can-enumerate-users",
+        "keyword": "Scenario",
+        "line": 20,
+        "name": "VULN-005b Admin can enumerate users",
+        "steps": [
+          {
+            "keyword": "Before",
+            "hidden": true,
+            "result": {
+              "status": "passed",
+              "duration": 471455200
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Given ",
+            "line": 21,
+            "name": "I login as \"admin\" with password \"admin123\"",
+            "match": {
+              "location": "tests\\step-definitions\\security-validation.steps.ts:18"
+            },
+            "result": {
+              "status": "failed",
+              "duration": 5487299,
+              "error_message": "apiRequestContext.post: connect ECONNREFUSED 127.0.0.1:8080\nCall log:\n\u001b[2m  - → POST http://127.0.0.1:8080/api/login\u001b[22m\n\u001b[2m    - user-agent: Playwright/1.61.1 (x64; windows 10.0) node/24.16\u001b[22m\n\u001b[2m    - accept: */*\u001b[22m\n\u001b[2m    - accept-encoding: gzip,deflate,br\u001b[22m\n\u001b[2m    - content-type: application/json\u001b[22m\n\u001b[2m    - content-length: 42\u001b[22m\n\n    at CustomWorld.<anonymous> (C:\\Users\\user\\Downloads\\vulnerable-springboot-app-feature-2.1\\vulnerable-springboot-app-feature-2.1\\tests\\step-definitions\\security-validation.steps.ts:19:38)"
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "When ",
+            "line": 22,
+            "name": "I request GET \"/api/users\" using basic auth for \"admin\"",
+            "match": {
+              "location": "tests\\step-definitions\\security-validation.steps.ts:31"
+            },
+            "result": {
+              "status": "skipped",
+              "duration": 0
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Then ",
+            "line": 23,
+            "name": "the response status should be 200 and body is an array",
+            "match": {
+              "location": "tests\\step-definitions\\security-validation.steps.ts:76"
+            },
+            "result": {
+              "status": "skipped",
+              "duration": 0
+            }
+          },
+          {
+            "keyword": "After",
+            "hidden": true,
+            "result": {
+              "status": "passed",
+              "duration": 366975000
+            }
+          }
+        ],
+        "tags": [],
+        "type": "scenario"
+      },
+      {
+        "description": "",
+        "id": "security-validation-for-remediations;vuln-006a-owner-can-read-own-profile,-non-owner-denied",
+        "keyword": "Scenario",
+        "line": 26,
+        "name": "VULN-006a Owner can read own profile, non-owner denied",
+        "steps": [
+          {
+            "keyword": "Before",
+            "hidden": true,
+            "result": {
+              "status": "passed",
+              "duration": 568071799
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Given ",
+            "line": 27,
+            "name": "I login as \"alice\" with password \"alice123\" and capture id as \"aliceId\"",
+            "match": {
+              "location": "tests\\step-definitions\\security-validation.steps.ts:24"
+            },
+            "result": {
+              "status": "failed",
+              "duration": 5184100,
+              "error_message": "apiRequestContext.post: connect ECONNREFUSED 127.0.0.1:8080\nCall log:\n\u001b[2m  - → POST http://127.0.0.1:8080/api/login\u001b[22m\n\u001b[2m    - user-agent: Playwright/1.61.1 (x64; windows 10.0) node/24.16\u001b[22m\n\u001b[2m    - accept: */*\u001b[22m\n\u001b[2m    - accept-encoding: gzip,deflate,br\u001b[22m\n\u001b[2m    - content-type: application/json\u001b[22m\n\u001b[2m    - content-length: 42\u001b[22m\n\n    at CustomWorld.<anonymous> (C:\\Users\\user\\Downloads\\vulnerable-springboot-app-feature-2.1\\vulnerable-springboot-app-feature-2.1\\tests\\step-definitions\\security-validation.steps.ts:25:38)"
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "When ",
+            "line": 28,
+            "name": "I request GET \"/api/profile/{aliceId}\" using basic auth for \"alice\"",
+            "match": {
+              "location": "tests\\step-definitions\\security-validation.steps.ts:31"
+            },
+            "result": {
+              "status": "skipped",
+              "duration": 0
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Then ",
+            "line": 29,
+            "name": "the response status should be 200 and username equals \"alice\"",
+            "match": {
+              "location": "tests\\step-definitions\\security-validation.steps.ts:104"
+            },
+            "result": {
+              "status": "skipped",
+              "duration": 0
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "When ",
+            "line": 30,
+            "name": "I login as \"bob\" with password \"bob123\" and capture as \"bobId\"",
+            "match": {
+              "location": "tests\\step-definitions\\security-validation.steps.ts:97"
+            },
+            "result": {
+              "status": "skipped",
+              "duration": 0
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 31,
+            "name": "I request GET \"/api/profile/{aliceId}\" using basic auth for \"bob\"",
+            "match": {
+              "location": "tests\\step-definitions\\security-validation.steps.ts:31"
+            },
+            "result": {
+              "status": "skipped",
+              "duration": 0
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Then ",
+            "line": 32,
+            "name": "the response status should be 403",
+            "match": {
+              "location": "tests\\step-definitions\\security-validation.steps.ts:72"
+            },
+            "result": {
+              "status": "skipped",
+              "duration": 0
+            }
+          },
+          {
+            "keyword": "After",
+            "hidden": true,
+            "result": {
+              "status": "passed",
+              "duration": 436222099
+            }
+          }
+        ],
+        "tags": [],
+        "type": "scenario"
+      },
+      {
+        "description": "",
+        "id": "security-validation-for-remediations;vuln-006b-owner-can-transfer-funds;-non-owner-cannot",
+        "keyword": "Scenario",
+        "line": 34,
+        "name": "VULN-006b Owner can transfer funds; non-owner cannot",
+        "steps": [
+          {
+            "keyword": "Before",
+            "hidden": true,
+            "result": {
+              "status": "passed",
+              "duration": 391545600
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Given ",
+            "line": 35,
+            "name": "I login as \"alice\" with password \"alice123\" and capture id as \"aliceId\"",
+            "match": {
+              "location": "tests\\step-definitions\\security-validation.steps.ts:24"
+            },
+            "result": {
+              "status": "failed",
+              "duration": 4522500,
+              "error_message": "apiRequestContext.post: connect ECONNREFUSED 127.0.0.1:8080\nCall log:\n\u001b[2m  - → POST http://127.0.0.1:8080/api/login\u001b[22m\n\u001b[2m    - user-agent: Playwright/1.61.1 (x64; windows 10.0) node/24.16\u001b[22m\n\u001b[2m    - accept: */*\u001b[22m\n\u001b[2m    - accept-encoding: gzip,deflate,br\u001b[22m\n\u001b[2m    - content-type: application/json\u001b[22m\n\u001b[2m    - content-length: 42\u001b[22m\n\n    at CustomWorld.<anonymous> (C:\\Users\\user\\Downloads\\vulnerable-springboot-app-feature-2.1\\vulnerable-springboot-app-feature-2.1\\tests\\step-definitions\\security-validation.steps.ts:25:38)"
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 36,
+            "name": "I login as \"bob\" with password \"bob123\" and capture id as \"bobId\"",
+            "match": {
+              "location": "tests\\step-definitions\\security-validation.steps.ts:24"
+            },
+            "result": {
+              "status": "skipped",
+              "duration": 0
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "When ",
+            "line": 37,
+            "name": "I perform POST \"/api/transfer\" with body {\"fromId\": {aliceId}, \"toId\": {bobId}, \"amount\": 10.0} using basic auth for \"alice\"",
+            "match": {
+              "location": "tests\\step-definitions\\security-validation.steps.ts:119"
+            },
+            "result": {
+              "status": "skipped",
+              "duration": 0
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Then ",
+            "line": 38,
+            "name": "the response status should be 200 and body.status equals \"ok\"",
+            "match": {
+              "location": "tests\\step-definitions\\security-validation.steps.ts:111"
+            },
+            "result": {
+              "status": "skipped",
+              "duration": 0
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "When ",
+            "line": 39,
+            "name": "I perform POST \"/api/transfer\" with body {\"fromId\": {aliceId}, \"toId\": {bobId}, \"amount\": 5.0} using basic auth for \"bob\"",
+            "match": {
+              "location": "tests\\step-definitions\\security-validation.steps.ts:119"
+            },
+            "result": {
+              "status": "skipped",
+              "duration": 0
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Then ",
+            "line": 40,
+            "name": "the response status should be 403",
+            "match": {
+              "location": "tests\\step-definitions\\security-validation.steps.ts:72"
+            },
+            "result": {
+              "status": "skipped",
+              "duration": 0
+            }
+          },
+          {
+            "keyword": "After",
+            "hidden": true,
+            "result": {
+              "status": "passed",
+              "duration": 135208500
+            }
+          }
+        ],
+        "tags": [],
+        "type": "scenario"
+      }
+    ],
+    "id": "security-validation-for-remediations",
+    "line": 1,
+    "keyword": "Feature",
+    "name": "Security validation for remediations",
+    "tags": [],
+    "uri": "features\\test.feature"
+  },
+  {
+    "description": "",
+    "elements": [
+      {
+        "description": "",
+        "id": "ui-security-validation;login-page-can-be-rendered-and-allows-alice-to-sign-in",
+        "keyword": "Scenario",
+        "line": 3,
+        "name": "Login page can be rendered and allows alice to sign in",
+        "steps": [
+          {
+            "keyword": "Before",
+            "hidden": true,
+            "result": {
+              "status": "passed",
+              "duration": 505502699
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Given ",
+            "line": 4,
+            "name": "I open the login page",
+            "match": {
+              "location": "tests\\step-definitions\\ui-security-validation.steps.ts:6"
+            },
+            "result": {
+              "status": "failed",
+              "duration": 2213449300,
+              "error_message": "page.goto: net::ERR_CONNECTION_REFUSED at http://127.0.0.1:8080/login\nCall log:\n\u001b[2m  - navigating to \"http://127.0.0.1:8080/login\", waiting until \"load\"\u001b[22m\n\n    at openBrowserPage (C:\\Users\\user\\Downloads\\vulnerable-springboot-app-feature-2.1\\vulnerable-springboot-app-feature-2.1\\tests\\support\\helpers.ts:62:23)\n    at CustomWorld.<anonymous> (C:\\Users\\user\\Downloads\\vulnerable-springboot-app-feature-2.1\\vulnerable-springboot-app-feature-2.1\\tests\\step-definitions\\ui-security-validation.steps.ts:7:24)"
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Then ",
+            "line": 5,
+            "name": "I should see a page containing \"OWASP Lab\"",
+            "match": {
+              "location": "tests\\step-definitions\\ui-security-validation.steps.ts:24"
+            },
+            "result": {
+              "status": "skipped",
+              "duration": 0
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "When ",
+            "line": 6,
+            "name": "I sign in as \"alice\" with password \"alice123\"",
+            "match": {
+              "location": "tests\\step-definitions\\ui-security-validation.steps.ts:12"
+            },
+            "result": {
+              "status": "skipped",
+              "duration": 0
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Then ",
+            "line": 7,
+            "name": "I should see a page containing \"Dashboard\"",
+            "match": {
+              "location": "tests\\step-definitions\\ui-security-validation.steps.ts:24"
+            },
+            "result": {
+              "status": "skipped",
+              "duration": 0
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 8,
+            "name": "I should see a page containing \"Signed in as alice\"",
+            "match": {
+              "location": "tests\\step-definitions\\ui-security-validation.steps.ts:24"
+            },
+            "result": {
+              "status": "skipped",
+              "duration": 0
+            }
+          },
+          {
+            "keyword": "After",
+            "hidden": true,
+            "result": {
+              "status": "passed",
+              "duration": 842972299
+            }
+          }
+        ],
+        "tags": [],
+        "type": "scenario"
+      }
+    ],
+    "id": "ui-security-validation",
+    "line": 1,
+    "keyword": "Feature",
+    "name": "UI security validation",
+    "tags": [],
+    "uri": "features\\ui-security-validation.feature"
+  }
+]

@@ -1,0 +1,334 @@
+[
+  {
+    "vulnerabilityId": "VULN-001",
+    "vulnerabilityTitle": "Unsafe Java native deserialization",
+    "cwe": "CWE-502",
+    "severityScore": 9.8,
+    "exploitabilityScore": 8.6,
+    "controllerName": "InsecureDeserializationController",
+    "endpointPath": "/api/deserialize",
+    "httpMethod": "POST",
+    "sourceFile": "src/main/java/com/owasp/lab/controller/InsecureDeserializationController.java",
+    "preFixBehavior": "Accepted base64-encoded Java serialized payload and deserialized with ObjectInputStream.readObject().",
+    "postFixBehavior": "Accepts only application/json and parses it safely with Jackson into a Map, preventing gadget-chain deserialization.",
+    "verificationStatus": "confirmed-fixed-in-code",
+    "evidence": [
+      "src/main/java/com/owasp/lab/controller/InsecureDeserializationController.java: method uses ObjectMapper.readValue(body, Map.class) and consumes application/json"
+    ]
+  },
+  {
+    "vulnerabilityId": "VULN-002",
+    "vulnerabilityTitle": "SQL injection in login flow",
+    "cwe": "CWE-89",
+    "severityScore": 9.8,
+    "exploitabilityScore": 8.4,
+    "controllerName": "AuthController",
+    "endpointPath": "/api/login",
+    "httpMethod": "POST",
+    "sourceFile": "src/main/java/com/owasp/lab/controller/AuthController.java",
+    "preFixBehavior": "Accepted raw username and password concatenated into native SQL and returned user data including cleartext password.",
+    "postFixBehavior": "Uses parameterized SQL and password hashing; returns only id, username, and role.",
+    "verificationStatus": "confirmed-fixed-in-code",
+    "evidence": [
+      "src/main/java/com/owasp/lab/service/UserService.java: createNativeQuery(\"SELECT * FROM users WHERE username = :username\", User.class).setParameter(\"username\", username)",
+      "src/main/java/com/owasp/lab/service/UserService.java: passwordEncoder.matches(password, candidate.getPassword())",
+      "src/main/java/com/owasp/lab/controller/AuthController.java: login response omits password field"
+    ]
+  },
+  {
+    "vulnerabilityId": "VULN-003",
+    "vulnerabilityTitle": "SQL injection in search query",
+    "cwe": "CWE-89",
+    "severityScore": 9.1,
+    "exploitabilityScore": 8.0,
+    "controllerName": "UserController",
+    "endpointPath": "/api/search",
+    "httpMethod": "GET",
+    "sourceFile": "src/main/java/com/owasp/lab/controller/UserController.java",
+    "preFixBehavior": "Passed the username query directly into a raw native SQL string, allowing boolean injection.",
+    "postFixBehavior": "Uses a parameterized native query that treats the search term as a literal value.",
+    "verificationStatus": "confirmed-fixed-in-code",
+    "evidence": [
+      "src/main/java/com/owasp/lab/service/UserService.java: createNativeQuery(\"SELECT * FROM users WHERE username = :username\", User.class).setParameter(\"username\", username)",
+      "src/main/java/com/owasp/lab/controller/UserController.java: search() delegates to UserService.findByUsernameUnsafe(q)"
+    ]
+  },
+  {
+    "vulnerabilityId": "VULN-004",
+    "vulnerabilityTitle": "Plain-Text Password Storage",
+    "cwe": "CWE-256",
+    "severityScore": 9.5,
+    "exploitabilityScore": 8.0,
+    "controllerName": "DataSeeder/AuthController",
+    "endpointPath": "/api/register",
+    "httpMethod": "POST",
+    "sourceFile": "src/main/java/com/owasp/lab/config/DataSeeder.java",
+    "preFixBehavior": "Seeded and registered users stored plaintext passwords in the database.",
+    "postFixBehavior": "Seed and register flows encode passwords with DelegatingPasswordEncoder (BCrypt) before persistence.",
+    "verificationStatus": "confirmed-fixed-in-code",
+    "evidence": [
+      "src/main/java/com/owasp/lab/config/PasswordConfig.java: defines PasswordEncoder bean via PasswordEncoderFactories.createDelegatingPasswordEncoder()",
+      "src/main/java/com/owasp/lab/config/DataSeeder.java: userRepository.save(... passwordEncoder.encode(\"alice123\"), ...)"
+    ]
+  },
+  {
+    "vulnerabilityId": "VULN-005",
+    "vulnerabilityTitle": "Broken access control for user enumeration",
+    "cwe": "CWE-284",
+    "severityScore": 9.0,
+    "exploitabilityScore": 7.6,
+    "controllerName": "UserController",
+    "endpointPath": "/api/users",
+    "httpMethod": "GET",
+    "sourceFile": "src/main/java/com/owasp/lab/controller/UserController.java",
+    "preFixBehavior": "Allowed any anonymous user to enumerate all user records.",
+    "postFixBehavior": "Restricts /api/users to ADMIN role only.",
+    "verificationStatus": "confirmed-fixed-in-code",
+    "evidence": [
+      "src/main/java/com/owasp/lab/controller/UserController.java: listUsers() checks caller authorities and throws AccessDeniedException if not ROLE_ADMIN",
+      "src/main/java/com/owasp/lab/config/SecurityConfig.java: authorizeHttpRequests lists public matchers and requires authenticated() for others"
+    ]
+  },
+  {
+    "vulnerabilityId": "VULN-006",
+    "vulnerabilityTitle": "IDOR and unauthorized profile access",
+    "cwe": "CWE-284",
+    "severityScore": 8.8,
+    "exploitabilityScore": 7.9,
+    "controllerName": "UserController",
+    "endpointPath": "/api/profile/{id}",
+    "httpMethod": "GET",
+    "sourceFile": "src/main/java/com/owasp/lab/controller/UserController.java",
+    "preFixBehavior": "Returned any user profile for any id without ownership or admin checks.",
+    "postFixBehavior": "Allows only the authenticated owner or an ADMIN to read the profile.",
+    "verificationStatus": "confirmed-fixed-in-code",
+    "evidence": [
+      "src/main/java/com/owasp/lab/controller/UserController.java: getProfile() verifies caller is authenticated and either ADMIN or username matches target.getUsername()"
+    ]
+  },
+  {
+    "vulnerabilityId": "VULN-006b",
+    "vulnerabilityTitle": "Unauthorized transfer ownership enforcement",
+    "cwe": "CWE-284",
+    "severityScore": 9.0,
+    "exploitabilityScore": 8.1,
+    "controllerName": "AuthController",
+    "endpointPath": "/api/transfer",
+    "httpMethod": "POST",
+    "sourceFile": "src/main/java/com/owasp/lab/controller/AuthController.java",
+    "preFixBehavior": "Allowed anyone to transfer funds from any account without authenticating as the source owner.",
+    "postFixBehavior": "Requires authentication and verifies the caller owns the from-account or has ADMIN privileges.",
+    "verificationStatus": "confirmed-fixed-in-code",
+    "evidence": [
+      "src/main/java/com/owasp/lab/controller/AuthController.java: transfer() checks caller != null and verifies caller.getUsername().equals(from.getUsername()) unless ADMIN"
+    ]
+  },
+  {
+    "vulnerabilityId": "VULN-007",
+    "vulnerabilityTitle": "Reflected cross-site scripting",
+    "cwe": "CWE-79",
+    "severityScore": 7.5,
+    "exploitabilityScore": 7.0,
+    "controllerName": "CommentController",
+    "endpointPath": "/api/comment/greet",
+    "httpMethod": "GET",
+    "sourceFile": "src/main/java/com/owasp/lab/controller/CommentController.java",
+    "preFixBehavior": "Returned user-controlled name directly into HTML without escaping.",
+    "postFixBehavior": "Escapes the name query parameter before rendering it into the HTML response.",
+    "verificationStatus": "confirmed-fixed-in-code",
+    "evidence": [
+      "src/main/java/com/owasp/lab/controller/CommentController.java: greet() uses HtmlUtils.htmlEscape(name) before concatenation"
+    ]
+  },
+  {
+    "vulnerabilityId": "VULN-008",
+    "vulnerabilityTitle": "Stored cross-site scripting",
+    "cwe": "CWE-79",
+    "severityScore": 7.8,
+    "exploitabilityScore": 7.2,
+    "controllerName": "CommentViewController",
+    "endpointPath": "/comments",
+    "httpMethod": "GET",
+    "sourceFile": "src/main/java/com/owasp/lab/controller/CommentViewController.java",
+    "preFixBehavior": "Rendered database comment text into HTML without escaping.",
+    "postFixBehavior": "Escapes author and body fields before concatenating them into the HTML page.",
+    "verificationStatus": "confirmed-fixed-in-code",
+    "evidence": [
+      "src/main/java/com/owasp/lab/controller/CommentViewController.java: HtmlUtils.htmlEscape(c.getAuthor()) and htmlEscape(c.getBody()) used when rendering"
+    ]
+  },
+  {
+    "vulnerabilityId": "VULN-009",
+    "vulnerabilityTitle": "Password leakage in login response",
+    "cwe": "CWE-200",
+    "severityScore": 7.2,
+    "exploitabilityScore": 6.8,
+    "controllerName": "AuthController",
+    "endpointPath": "/api/login",
+    "httpMethod": "POST",
+    "sourceFile": "src/main/java/com/owasp/lab/controller/AuthController.java",
+    "preFixBehavior": "Returned the user's plain-text password in the authenticated login response.",
+    "postFixBehavior": "Returns only id, username, and role; the password field is omitted.",
+    "verificationStatus": "confirmed-fixed-in-code",
+    "evidence": [
+      "src/main/java/com/owasp/lab/controller/AuthController.java: login() ResponseEntity.ok(Map.of(\"id\", u.getId(), \"username\", u.getUsername(), \"role\", u.getRole()))"
+    ]
+  },
+  {
+    "vulnerabilityId": "VULN-010",
+    "vulnerabilityTitle": "Hardcoded Secrets in Source Control",
+    "cwe": "CWE-798",
+    "severityScore": 7.6,
+    "exploitabilityScore": 6.5,
+    "controllerName": "SecretConfig",
+    "endpointPath": "application.properties",
+    "httpMethod": "N/A",
+    "sourceFile": "src/main/java/com/owasp/lab/config/SecretConfig.java",
+    "preFixBehavior": "Hardcoded secrets present in application.properties and rendered into pages.",
+    "postFixBehavior": "Secrets sourced from environment variables via placeholders; SecretConfig exposes beans that return env-sourced values.",
+    "verificationStatus": "confirmed-fixed-in-code",
+    "evidence": [
+      "src/main/resources/application.properties: app.secret.api.key=${APP_SECRET_API_KEY:} (env-var placeholder)",
+      "src/main/java/com/owasp/lab/config/SecretConfig.java: @Value(...) fields and beans returning values"
+    ]
+  },
+  {
+    "vulnerabilityId": "VULN-011",
+    "vulnerabilityTitle": "Missing CSRF Protection on State-Changing Endpoints",
+    "cwe": "CWE-352",
+    "severityScore": 7.4,
+    "exploitabilityScore": 6.9,
+    "controllerName": "SecurityConfig",
+    "endpointPath": "global",
+    "httpMethod": "N/A",
+    "sourceFile": "src/main/java/com/owasp/lab/config/SecurityConfig.java",
+    "preFixBehavior": "CSRF protection was disabled across the app.",
+    "postFixBehavior": "CSRF protection re-enabled; explicit ignoring only for H2 console and a few JSON endpoints where appropriate.",
+    "verificationStatus": "confirmed-fixed-in-code",
+    "evidence": [
+      "src/main/java/com/owasp/lab/config/SecurityConfig.java: csrf().ignoringRequestMatchers(... /h2-console/**, /api/login, /api/register, /api/deserialize, /api/transfer, /api/comment)"
+    ]
+  },
+  {
+    "vulnerabilityId": "VULN-012",
+    "vulnerabilityTitle": "Mass-Assignment / Privilege Escalation via register",
+    "cwe": "CWE-915",
+    "severityScore": 7.0,
+    "exploitabilityScore": 6.0,
+    "controllerName": "AuthController",
+    "endpointPath": "/api/register",
+    "httpMethod": "POST",
+    "sourceFile": "src/main/java/com/owasp/lab/controller/AuthController.java",
+    "preFixBehavior": "Register accepted a client-supplied role allowing creation of ADMIN accounts.",
+    "postFixBehavior": "Register forces role to USER server-side and encodes passwords before save.",
+    "verificationStatus": "confirmed-fixed-in-code",
+    "evidence": [
+      "src/main/java/com/owasp/lab/controller/AuthController.java: register() forces role to \"USER\" and calls passwordEncoder.encode(password)",
+      "src/main/resources/application.properties: spring.jackson.deserialization.fail-on-unknown-properties=true"
+    ]
+  },
+  {
+    "vulnerabilityId": "VULN-013",
+    "vulnerabilityTitle": "JWT Signing Key With Insufficient Entropy",
+    "cwe": "CWE-330",
+    "severityScore": 6.5,
+    "exploitabilityScore": 5.8,
+    "controllerName": "SecretConfig",
+    "endpointPath": "application.properties",
+    "httpMethod": "N/A",
+    "sourceFile": "src/main/resources/application.properties",
+    "preFixBehavior": "Hardcoded JWT signing key in source control.",
+    "postFixBehavior": "JWT signing key is sourced from environment variable placeholder; no hardcoded default provided.",
+    "verificationStatus": "confirmed-fixed-in-code",
+    "evidence": [
+      "src/main/resources/application.properties: app.secret.jwt.signing.key=${APP_SECRET_JWT_SIGNING_KEY:}",
+      "src/main/java/com/owasp/lab/config/SecretConfig.java: jwtSigningKey bean"
+    ]
+  },
+  {
+    "vulnerabilityId": "VULN-014",
+    "vulnerabilityTitle": "Verbose SQL Logging with Sensitive Data Exposure",
+    "cwe": "CWE-532",
+    "severityScore": 5.8,
+    "exploitabilityScore": 4.2,
+    "controllerName": "application.properties",
+    "endpointPath": "logging",
+    "httpMethod": "N/A",
+    "sourceFile": "src/main/resources/application.properties",
+    "preFixBehavior": "Hibernate SQL and bind parameters were logged at DEBUG/TRACE, exposing sensitive data.",
+    "postFixBehavior": "SQL logging disabled and parameter tracing turned off; log levels set to WARN/OFF.",
+    "verificationStatus": "confirmed-fixed-in-code",
+    "evidence": [
+      "src/main/resources/application.properties: spring.jpa.show-sql=false; logging.level.org.hibernate.SQL=WARN; logging.level.org.hibernate.type.descriptor.sql=OFF"
+    ]
+  },
+  {
+    "vulnerabilityId": "VULN-015",
+    "vulnerabilityTitle": "No Security Logging / Monitoring on AuthN Events",
+    "cwe": "CWE-778",
+    "severityScore": 6.2,
+    "exploitabilityScore": 5.0,
+    "controllerName": "AuthController/UserService",
+    "endpointPath": "login/search",
+    "httpMethod": "POST/DB",
+    "sourceFile": "src/main/java/com/owasp/lab/controller/AuthController.java",
+    "preFixBehavior": "Silent exception swallowing and no structured logs for failed login or query errors.",
+    "postFixBehavior": "Failed logins and query errors emit structured SLF4J WARN logs for monitoring.",
+    "verificationStatus": "confirmed-fixed-in-code",
+    "evidence": [
+      "src/main/java/com/owasp/lab/controller/AuthController.java: warns on failed login attempts",
+      "src/main/java/com/owasp/lab/service/UserService.java: catch blocks log warnings for failed queries"
+    ]
+  },
+  {
+    "vulnerabilityId": "VULN-016",
+    "vulnerabilityTitle": "Missing Security Headers / Clickjacking / CSP",
+    "cwe": "CWE-693",
+    "severityScore": 6.0,
+    "exploitabilityScore": 4.5,
+    "controllerName": "SecurityConfig",
+    "endpointPath": "global",
+    "httpMethod": "N/A",
+    "sourceFile": "src/main/java/com/owasp/lab/config/SecurityConfig.java",
+    "preFixBehavior": "No CSP, HSTS, or secure response headers; frameOptions disabled.",
+    "postFixBehavior": "Content-Security-Policy, HSTS, Referrer-Policy and frameOptions SAMEORIGIN configured.",
+    "verificationStatus": "confirmed-fixed-in-code",
+    "evidence": [
+      "src/main/java/com/owasp/lab/config/SecurityConfig.java: headers().contentSecurityPolicy(...).frameOptions(sameOrigin).httpStrictTransportSecurity(...)"
+    ]
+  },
+  {
+    "vulnerabilityId": "VULN-017",
+    "vulnerabilityTitle": "H2 Console Exposed on Production-Equivalent Port",
+    "cwe": "CWE-668",
+    "severityScore": 4.5,
+    "exploitabilityScore": 3.2,
+    "controllerName": "application.properties",
+    "endpointPath": "/h2-console",
+    "httpMethod": "N/A",
+    "sourceFile": "src/main/resources/application.properties",
+    "preFixBehavior": "H2 console enabled by default and exposed on the web UI.",
+    "postFixBehavior": "H2 console disabled by default; can be enabled via H2_CONSOLE_ENABLED=true in env.",
+    "verificationStatus": "confirmed-fixed-in-code",
+    "evidence": [
+      "src/main/resources/application.properties: spring.h2.console.enabled=${H2_CONSOLE_ENABLED:false}"
+    ]
+  },
+  {
+    "vulnerabilityId": "VULN-018",
+    "vulnerabilityTitle": "Information Disclosure via /vulnerabilities",
+    "cwe": "CWE-200",
+    "severityScore": 4.2,
+    "exploitabilityScore": 3.1,
+    "controllerName": "VulnerabilityController",
+    "endpointPath": "/api/vulnerabilities",
+    "httpMethod": "GET",
+    "sourceFile": "src/main/java/com/owasp/lab/controller/VulnerabilityController.java",
+    "preFixBehavior": "Rendered API keys and DB passwords into HTML responses via @Value autowired fields.",
+    "postFixBehavior": "No secret values rendered; page indicates secrets are redacted and sourced from env vars.",
+    "verificationStatus": "confirmed-fixed-in-code",
+    "evidence": [
+      "src/main/java/com/owasp/lab/controller/VulnerabilityController.java: response contains 'Secrets: redacted - sourced from environment variables' and no @Value interpolation"
+    ]
+  }
+]
